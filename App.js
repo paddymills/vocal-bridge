@@ -1,12 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import NavBar from './NavBar';
+import Home from './Home';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('Home');
+
+  const renderScreen = () => {
+    switch (activeTab) {
+      case 'Home':
+        return <Home />;
+      case 'Upload':
+        return <Text >Nothing yet</Text>;
+      case 'Settings':
+        return <Text >Nothing yet</Text>;
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <SafeAreaView style={styles.container}>
+
+        <View style={styles.content}>
+          {renderScreen()}
+        </View>
+
+
+        <NavBar activeTab={activeTab} onTabPress={setActiveTab} />
+
+
+        <StatusBar style="auto" />
+      </SafeAreaView>
   );
 }
 
@@ -14,8 +38,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 500
   },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
 });
