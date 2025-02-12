@@ -14,3 +14,4 @@ Relevant Packages:
 
 "@react-native-community/voice" for microphone use
 "react-native-feather" for icons
+"expo-document-picker" for uploading files
