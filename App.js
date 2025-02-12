@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import React, { useState } from 'react';
 import NavBar from './NavBar';
 import Home from './Home';
+import Upload from './Upload';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Home');
@@ -12,7 +13,7 @@ export default function App() {
       case 'Home':
         return <Home />;
       case 'Upload':
-        return <Text >Nothing yet</Text>;
+        return <Upload />;
       case 'Settings':
         return <Text >Nothing yet</Text>;
     }
