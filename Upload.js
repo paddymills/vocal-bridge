@@ -12,11 +12,13 @@ const Upload = () => {
             const res = await DocumentPicker.getDocumentAsync({
                 type: 'audio/*',
             });
-            if (res.type === 'success') {
-                console.log(res);
-            } else {
-                console.log('User cancelled the upload');
-            }
+            //make sure the user selected a file
+             if (res !== null) {
+                 console.log(res);
+                 console.log('success')
+             } else {
+                 console.log('no file selected');
+             }
         } catch (err) {
             console.error(err);
         }
@@ -38,7 +40,7 @@ const Upload = () => {
                 />
             </View>
             {isListVisible && (
-                <Text style={styles.text}>Recordings:</Text>
+                <Text style={styles.toggleText}>Recordings:</Text>
             )}
         </View>
     );
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
     toggleText: {
         fontSize: 18,
         marginRight: 10,
+        color: 'black',
     },
     recordingItem: {
         fontSize: 16,
