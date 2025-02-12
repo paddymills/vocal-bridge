@@ -1,0 +1,14 @@
+2/12/2025
+
+For anyone unfamiliar with react, App.js is our main file. It uses navigation to go to the three pages, which will be their own .js files. I implemented the home page today. - Evan
+
+
+<future entries>
+
+
+
+
+Relevant Packages:
+
+"@react-native-community/voice" for microphone use
+"react-native-feather" for icons
