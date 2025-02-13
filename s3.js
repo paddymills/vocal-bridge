@@ -1,22 +1,30 @@
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
-import { createReadStream } from "fs";
-import "dotenv/config";
+import * as FileSystem from 'expo-file-system';
+import { Buffer } from 'buffer';
+import { S3_BUCKET, S3_REGION,ACCESS_KEY, SECRET_ACCESS_KEY } from '@env';
+
+// Remove extra quotes from environment variables
+const accessKeyId = ACCESS_KEY.replace(/['"]+/g, '');
+const secretAccessKey = SECRET_ACCESS_KEY.replace(/['"]+/g, '');
 
 // Configure AWS SDK
 const cfg = {
-  region: process.env.REGION,
+  region: S3_REGION,
   credentials: {
-    accessKeyId: process.env.ACCESS_KEY,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
   },
 };
+
+// Debugging: Log AWS SDK configuration
+//console.log(cfg);
 
 // get a recording file from S3 storage
 async function getRecordingFile(filename) {
   // Get object from S3
   const params = {
-    Bucket: process.env.S3_BUCKET,
+    Bucket: S3_BUCKET,
     Key: `recordings/${filename}`,
   };
 
@@ -28,16 +36,35 @@ async function getRecordingFile(filename) {
 }
 
 // upload a recording file to S3
-async function recordingRecordingFile(filename) {
-  // Save object to S3
-  const fileStream = createReadStream(filename);
+export async function uploadRecordingFile(file) {
+  // Read the file content using expo-file-system
+  
+  const fileUri = file.assets[0].uri;
+
+  let fileContent;
+  try {
+    console
+    fileContent = await FileSystem.readAsStringAsync(fileUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+  } catch (error) {
+    console.error('Error reading file:', error);
+    throw error;
+  }
+  const buffer = Buffer.from(fileContent, 'base64');
+
+  console.log("hi");
   const params = {
-    Bucket: process.env.S3_BUCKET,
-    Key: `recordings/${filename}`,
-    Body: fileStream,
+    Bucket: S3_BUCKET,
+    Key: `recordings/${file.assets[0].name}`,
+    Body: buffer,
+    ContentType: file.mimeType,
   };
 
+  console.log("hi");
+  console.log(cfg);
   const client = new S3Client(cfg);
+  console.log("hi");
   const res = new Upload({ client, params });
   res.on("httpUploadProgress", (progress) => {
     console.log(progress);

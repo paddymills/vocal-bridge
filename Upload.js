@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Switch, FlatList } from 'react-native';
 import * as Icon from "react-native-feather";
 import * as DocumentPicker from 'expo-document-picker';
+import {uploadRecordingFile} from './s3.js';
 
 const Upload = () => {
     const [isListVisible, setIsListVisible] = useState(false);
     const [recordings, setRecordings] = useState([]);
+    const [uploadStatus, setUploadStatus] = useState(null); // State variable to track upload status
 
     const handleUpload = async () => {
         try {
@@ -14,13 +16,23 @@ const Upload = () => {
             });
             //make sure the user selected a file
              if (res !== null) {
-                 console.log(res);
-                 console.log('success')
-             } else {
-                 console.log('no file selected');
-             }
+                const file = res;
+                console.log(file);
+                console.log('success');
+                setRecordings([...recordings, file]);
+                setUploadStatus('success'); // Set upload status to success
+
+                // Upload to S3
+                console.log('Uploading file to S3...');
+                await uploadRecordingFile(file);
+                console.log('Successfully uploaded file to S3');
+            } else {
+                console.log('no file selected');
+               setUploadStatus('error'); // Set upload status to error
+            }
         } catch (err) {
             console.error(err);
+           setUploadStatus('error'); // Set upload status to error
         }
     };
 
