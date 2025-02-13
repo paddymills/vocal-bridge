@@ -10,6 +10,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.744.0",
+    "@aws-sdk/lib-storage": "^3.744.0",
     "@expo/metro-runtime": "~4.0.1",
     "@react-native-community/voice": "^1.1.9",
     "@react-native-vector-icons/feather": "^4.29.2",
